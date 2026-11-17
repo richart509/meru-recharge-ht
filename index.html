@@ -1,1 +1,70 @@
 
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERU RECHARGE HT</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef3fa;color:#142b4c}
+header{background:#102c54;color:white;text-align:center;padding:30px 15px}
+header h1{margin:0;font-size:27px}
+main{max-width:430px;margin:30px auto;padding:22px;background:white;border-radius:16px;box-shadow:0 5px 20px #0001}
+label{display:block;margin:17px 0 7px;font-weight:bold}
+input,select{width:100%;padding:14px;border:1px solid #ccd5e1;border-radius:8px;font-size:16px}
+button{width:100%;padding:15px;margin-top:22px;background:#1769c2;color:white;border:0;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+.note{font-size:12px;color:#64748b;line-height:1.6}
+footer{text-align:center;font-size:12px;color:#64748b;padding:20px}
+</style>
+</head>
+<body>
+<header>
+<h1>MERU RECHARGE HT</h1>
+<p>Recharge rapide et sécurisée</p>
+</header>
+<main>
+<h2>Nouvelle recharge</h2>
+
+<label>ID kont Meru</label>
+<input id="meru" placeholder="Antre ID oswa imel Meru">
+
+<label>Montan rechaj (USD)</label>
+<select id="amount">
+<option value="5">5 USD</option>
+<option value="10">10 USD</option>
+<option value="20">20 USD</option>
+<option value="50">50 USD</option>
+<option value="100">100 USD</option>
+</select>
+
+<label>Metòd peman</label>
+<select id="payment">
+<option value="MonCash">MonCash</option>
+<option value="NatCash">NatCash</option>
+</select>
+
+<button onclick="recharge()">Kontinye</button>
+<p class="note">Sa a se yon demonstrasyon. Peman ak transfè Meru poko aktive. Pa voye lajan sou paj sa a.</p>
+</main>
+<footer>© 2026 MERU RECHARGE HT</footer>
+
+<script>
+function recharge(){
+const meru=document.getElementById("meru").value.trim();
+const amount=document.getElementById("amount").value;
+const payment=document.getElementById("payment").value;
+
+if(!meru){
+alert("Tanpri antre ID kont Meru ou.");
+return;
+}
+alert("Demann tès ou a:\nKont: "+meru+
+"\nMontan: "+amount+" USD"+
+"\nPeman: "+payment+
+"\nSistèm peman poko aktive.");
+}
+</script>
+</body>
+</html>
+
