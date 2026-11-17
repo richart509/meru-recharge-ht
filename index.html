@@ -3,10 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MERU RECHARGE HT</title>
 
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box}
+
+*{
+box-sizing:border-box
+}
 
 body{
 margin:0;
@@ -56,7 +63,8 @@ font-weight:bold;
 margin:18px 0 8px
 }
 
-input,select{
+input,
+select{
 width:100%;
 padding:15px;
 border:1px solid #d9e1ec;
@@ -124,6 +132,11 @@ cursor:pointer
 
 button:hover{
 background:#1258a3
+}
+
+button:disabled{
+background:#94a3b8;
+cursor:not-allowed
 }
 
 .confirmation{
@@ -197,222 +210,472 @@ margin-top:10px
 .copy-btn:hover{
 background:#0d5f59
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="logo">MERU RECHARGE HT</div>
-<p>Recharge rapide • Simple • Sécurisée</p>
+
+<div class="logo">
+MERU RECHARGE HT
+</div>
+
+<p>
+Recharge rapide • Simple • Sécurisée
+</p>
+
 </header>
+
 
 <main>
 
-<!-- FORMULAIRE RECHAJ -->
+
+<!-- ========================= -->
+<!-- FORMULAIRE RECHARGE -->
+<!-- ========================= -->
+
 <div class="card" id="rechargeCard">
 
-<h2>💳 Nouvelle recharge</h2>
+<h2>
+💳 Nouvelle recharge
+</h2>
 
 <p style="color:#64748b">
 Ranpli enfòmasyon yo pou prepare kòmann ou.
 </p>
 
-<label>ID oswa imel kont Meru</label>
+
+<label>
+ID oswa imel kont Meru
+</label>
 
 <input
 id="meru"
 type="text"
 placeholder="Antre enfòmasyon kont Meru ou"
+autocomplete="off"
 >
 
-<label>Chwazi montan an</label>
+
+<label>
+Chwazi montan an
+</label>
 
 <select id="amount" onchange="updateTotal()">
-<option value="5">5 USD</option>
-<option value="10">10 USD</option>
-<option value="20">20 USD</option>
-<option value="50">50 USD</option>
-<option value="100">100 USD</option>
+
+<option value="5">
+5 USD
+</option>
+
+<option value="10">
+10 USD
+</option>
+
+<option value="20">
+20 USD
+</option>
+
+<option value="50">
+50 USD
+</option>
+
+<option value="100">
+100 USD
+</option>
+
 </select>
 
-<label>Chwazi metòd peman</label>
+
+<label>
+Chwazi metòd peman
+</label>
+
 
 <div class="methods">
 
 <label class="method">
-<input type="radio" name="payment" value="MonCash" checked>
+
+<input
+type="radio"
+name="payment"
+value="MonCash"
+checked
+>
+
 MonCash
+
 </label>
 
+
 <label class="method">
-<input type="radio" name="payment" value="NatCash">
+
+<input
+type="radio"
+name="payment"
+value="NatCash"
+>
+
 NatCash
+
 </label>
 
 </div>
+
+
+<!-- REZIME -->
 
 <div class="summary">
 
-<strong>REZIME KÒMANN</strong>
+<strong>
+REZIME KÒMANN
+</strong>
+
 
 <p>
-<span>Montan rechaj</span>
-<strong id="usd">5 USD</strong>
+
+<span>
+Montan rechaj
+</span>
+
+<strong id="usd">
+5 USD
+</strong>
+
 </p>
 
-<p>
-<span>To dola</span>
-<strong>130 HTG / USD</strong>
-</p>
 
 <p>
-<span>Pri baz</span>
-<strong id="base">650 HTG</strong>
+
+<span>
+To dola
+</span>
+
+<strong>
+130 HTG / USD
+</strong>
+
 </p>
 
+
 <p>
-<span>Komisyon (10%)</span>
-<strong id="fee">65 HTG</strong>
+
+<span>
+Pri baz
+</span>
+
+<strong id="base">
+650 HTG
+</strong>
+
 </p>
+
+
+<p>
+
+<span>
+Komisyon (10%)
+</span>
+
+<strong id="fee">
+65 HTG
+</strong>
+
+</p>
+
 
 <hr>
 
+
 <p>
-<strong>Total pou peye</strong>
-<strong class="total" id="total">715 HTG</strong>
+
+<strong>
+Total pou peye
+</strong>
+
+<strong
+class="total"
+id="total"
+>
+715 HTG
+</strong>
+
 </p>
 
 </div>
 
-<button onclick="recharge()">
+
+<button
+id="rechargeButton"
+onclick="recharge()"
+>
+
 KONTINYE
+
 </button>
 
+
 <p class="small">
-Remak: Peman MonCash/NatCash ak transfè Meru poko aktive.
-Pa voye lajan sou paj demonstrasyon sa a.
+
+Kòmann ou kreye a ap anrejistre otomatikman nan sistèm MERU RECHARGE HT.
+
 </p>
 
 </div>
 
 
-<!-- KONFIMASYON KÒMANN -->
 
-<div class="card confirmation" id="confirmationCard">
+<!-- ========================= -->
+<!-- KONFIMASYON -->
+<!-- ========================= -->
 
-<div class="success">✅</div>
+<div
+class="card confirmation"
+id="confirmationCard"
+>
 
-<h2>Kòmann ou kreye!</h2>
+<div class="success">
+✅
+</div>
+
+
+<h2>
+Kòmann ou kreye!
+</h2>
+
 
 <p style="color:#64748b">
+
 Tanpri konsève nimewo tranzaksyon sa a.
+
 </p>
+
 
 <div class="order-box">
 
-<p>
-<span>Nimewo kòmann</span>
-<strong id="orderId"></strong>
-</p>
 
 <p>
-<span>Kont Meru</span>
-<strong id="orderMeru"></strong>
+
+<span>
+Nimewo kòmann
+</span>
+
+<strong id="orderId">
+</strong>
+
 </p>
 
-<p>
-<span>Rechaj</span>
-<strong id="orderAmount"></strong>
-</p>
 
 <p>
-<span>Pri baz</span>
-<strong id="orderBase"></strong>
+
+<span>
+Kont Meru
+</span>
+
+<strong id="orderMeru">
+</strong>
+
 </p>
 
-<p>
-<span>Komisyon</span>
-<strong id="orderFee"></strong>
-</p>
 
 <p>
-<span>Total</span>
-<strong id="orderTotal"></strong>
+
+<span>
+Rechaj
+</span>
+
+<strong id="orderAmount">
+</strong>
+
 </p>
 
-<p>
-<span>Peman</span>
-<strong id="orderPayment"></strong>
-</p>
 
 <p>
-<span>Estati</span>
-<strong class="status">AN ATANT</strong>
+
+<span>
+Pri baz
+</span>
+
+<strong id="orderBase">
+</strong>
+
 </p>
+
+
+<p>
+
+<span>
+Komisyon
+</span>
+
+<strong id="orderFee">
+</strong>
+
+</p>
+
+
+<p>
+
+<span>
+Total
+</span>
+
+<strong id="orderTotal">
+</strong>
+
+</p>
+
+
+<p>
+
+<span>
+Peman
+</span>
+
+<strong id="orderPayment">
+</strong>
+
+</p>
+
+
+<p>
+
+<span>
+Estati
+</span>
+
+<strong class="status">
+AN ATANT
+</strong>
+
+</p>
+
 
 </div>
 
-<button class="copy-btn" onclick="copyOrder()">
+
+<button
+class="copy-btn"
+onclick="copyOrder()"
+>
+
 📋 KOPYE NIMEWO KÒMANN
+
 </button>
 
-<button class="secondary" onclick="newOrder()">
+
+<button
+class="secondary"
+onclick="newOrder()"
+>
+
 ➕ FÈ YON LÒT KÒMANN
+
 </button>
+
 
 <p class="small">
-Kòmann sa a anrejistre kòm yon demonstrasyon.
-Peman ak rechaj Meru poko fèt otomatikman.
+
+Kòmann lan anrejistre nan baz done MERU RECHARGE HT epi li rete an atant jiskaske administratè a trete li.
+
 </p>
 
+
 </div>
+
 
 </main>
 
+
 <footer>
+
 © 2026 MERU RECHARGE HT • Tout dwa rezève
+
 </footer>
+
 
 
 <script>
 
+
+/* ===================================== */
+/* KONFIGIRASYON SUPABASE */
+/* ===================================== */
+
+const SUPABASE_URL =
+"https://xnspppxuceuihtfrunbb.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_LFqzZBl76AMqlAASXgfw7g_VDbTHEOL";
+
+
+const supabaseClient =
+supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* ===================================== */
+/* KONFIGIRASYON RECHARGE */
+/* ===================================== */
+
 const EXCHANGE_RATE = 130;
+
 const COMMISSION_RATE = 0.10;
 
 
-/* Fòma lajan */
+
+/* ===================================== */
+/* FÒMA LAJAN */
+/* ===================================== */
 
 function money(value){
+
 return value.toLocaleString("fr-FR") + " HTG";
+
 }
 
 
-/* Kalkile total */
+
+/* ===================================== */
+/* KALKILE TOTAL */
+/* ===================================== */
 
 function updateTotal(){
 
 const amount =
-Number(document.getElementById("amount").value);
+Number(
+document.getElementById("amount").value
+);
+
 
 const base =
 amount * EXCHANGE_RATE;
 
+
 const fee =
 base * COMMISSION_RATE;
+
 
 const total =
 base + fee;
 
 
+
 document.getElementById("usd").textContent =
 amount + " USD";
+
 
 document.getElementById("base").textContent =
 money(base);
 
+
 document.getElementById("fee").textContent =
 money(fee);
+
 
 document.getElementById("total").textContent =
 money(total);
@@ -420,42 +683,91 @@ money(total);
 }
 
 
-/* Kreye nimewo kòmann */
+
+/* ===================================== */
+/* KREYE NUMEWO KÒMANN */
+/* ===================================== */
 
 function generateOrderId(){
 
-const now = new Date();
+const now =
+new Date();
 
-const year = now.getFullYear();
+
+const year =
+now.getFullYear();
+
 
 const month =
-String(now.getMonth()+1).padStart(2,"0");
+String(
+now.getMonth()+1
+).padStart(2,"0");
+
 
 const day =
-String(now.getDate()).padStart(2,"0");
+String(
+now.getDate()
+).padStart(2,"0");
+
 
 const random =
-Math.floor(1000 + Math.random()*9000);
+Math.floor(
+1000 + Math.random()*9000
+);
 
-return "MR-" + year + month + day + "-" + random;
+
+return (
+"MR-" +
+year +
+month +
+day +
+"-" +
+random
+);
 
 }
 
 
-/* Kreye kòmann */
 
-function recharge(){
+/* ===================================== */
+/* KREYE KÒMANN */
+/* ===================================== */
+
+async function recharge(){
 
 const meru =
-document.getElementById("meru").value.trim();
+document
+.getElementById("meru")
+.value
+.trim();
+
 
 const amount =
-Number(document.getElementById("amount").value);
+Number(
+document.getElementById("amount").value
+);
 
-const payment =
+
+const paymentElement =
 document.querySelector(
 'input[name="payment"]:checked'
-).value;
+);
+
+
+if(!paymentElement){
+
+alert(
+"Tanpri chwazi yon metòd peman."
+);
+
+return;
+
+}
+
+
+const payment =
+paymentElement.value;
+
 
 
 if(!meru){
@@ -469,109 +781,317 @@ return;
 }
 
 
+
+/* KALKIL */
+
 const base =
 amount * EXCHANGE_RATE;
+
 
 const fee =
 base * COMMISSION_RATE;
 
+
 const total =
 base + fee;
+
+
+
+/* NUMEWO KÒMANN */
 
 const orderId =
 generateOrderId();
 
 
-/* Mete enfòmasyon yo nan paj konfimasyon */
 
-document.getElementById("orderId").textContent =
-orderId;
+/* BLOKE BOUTON AN */
 
-document.getElementById("orderMeru").textContent =
-meru;
-
-document.getElementById("orderAmount").textContent =
-amount + " USD";
-
-document.getElementById("orderBase").textContent =
-money(base);
-
-document.getElementById("orderFee").textContent =
-money(fee);
-
-document.getElementById("orderTotal").textContent =
-money(total);
-
-document.getElementById("orderPayment").textContent =
-payment;
+const button =
+document.getElementById(
+"rechargeButton"
+);
 
 
-/* Chanje ekran */
+button.disabled = true;
 
-document.getElementById("rechargeCard").style.display =
-"none";
-
-document.getElementById("confirmationCard").style.display =
-"block";
+button.textContent =
+"AP ANREJISTRE...";
 
 
-/* Mete paj la anlè */
 
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
+try{
+
+
+/* ================================= */
+/* ANREJISTRE NAN SUPABASE */
+/* ================================= */
+
+const { data, error } =
+await supabaseClient
+.from("orders")
+.insert([
+
+{
+
+order_number: orderId,
+
+meru_account: meru,
+
+amount_usd: amount,
+
+exchange_rate: EXCHANGE_RATE,
+
+base_amount_htg: base,
+
+commission_htg: fee,
+
+total_htg: total,
+
+payment_method: payment,
+
+status: "pending"
+
+}
+
+])
+
+.select();
+
+
+
+/* SI GEN ERÈ */
+
+if(error){
+
+console.error(
+"Supabase error:",
+error
+);
+
+
+alert(
+"Nou pa kapab anrejistre kòmann lan.\n\n" +
+error.message
+);
+
+
+button.disabled = false;
+
+button.textContent =
+"KONTINYE";
+
+return;
 
 }
 
 
-/* Kopye nimewo kòmann */
 
-function copyOrder(){
+/* ================================= */
+/* MONTRE KONFIMASYON */
+/* ================================= */
 
-const orderId =
-document.getElementById("orderId").textContent;
+document.getElementById(
+"orderId"
+).textContent =
+orderId;
 
-navigator.clipboard.writeText(orderId);
+
+document.getElementById(
+"orderMeru"
+).textContent =
+meru;
+
+
+document.getElementById(
+"orderAmount"
+).textContent =
+amount + " USD";
+
+
+document.getElementById(
+"orderBase"
+).textContent =
+money(base);
+
+
+document.getElementById(
+"orderFee"
+).textContent =
+money(fee);
+
+
+document.getElementById(
+"orderTotal"
+).textContent =
+money(total);
+
+
+document.getElementById(
+"orderPayment"
+).textContent =
+payment;
+
+
+
+/* CHANJE EKRAN */
+
+document.getElementById(
+"rechargeCard"
+).style.display =
+"none";
+
+
+document.getElementById(
+"confirmationCard"
+).style.display =
+"block";
+
+
+
+/* ALE ANLÈ */
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+
+}catch(error){
+
+
+console.error(error);
+
 
 alert(
-"Nimewo kòmann "+orderId+" kopiye."
+"Gen yon pwoblèm teknik. Tanpri eseye ankò."
+);
+
+
+button.disabled = false;
+
+button.textContent =
+"KONTINYE";
+
+}
+
+}
+
+
+
+/* ===================================== */
+/* KOPYE NUMEWO KÒMANN */
+/* ===================================== */
+
+async function copyOrder(){
+
+const orderId =
+document
+.getElementById("orderId")
+.textContent;
+
+
+try{
+
+await navigator.clipboard.writeText(
+orderId
+);
+
+
+alert(
+"Nimewo kòmann " +
+orderId +
+" kopiye."
+);
+
+
+}catch(error){
+
+alert(
+"Nimewo kòmann ou se: " +
+orderId
 );
 
 }
 
+}
 
-/* Nouvo kòmann */
+
+
+/* ===================================== */
+/* FÈ YON LÒT KÒMANN */
+/* ===================================== */
 
 function newOrder(){
 
-document.getElementById("meru").value = "";
 
-document.getElementById("amount").value = "5";
+document.getElementById(
+"meru"
+).value =
+"";
+
+
+document.getElementById(
+"amount"
+).value =
+"5";
+
 
 document.querySelector(
 'input[name="payment"][value="MonCash"]'
-).checked = true;
+).checked =
+true;
 
 
-document.getElementById("confirmationCard").style.display =
+document.getElementById(
+"confirmationCard"
+).style.display =
 "none";
 
-document.getElementById("rechargeCard").style.display =
+
+document.getElementById(
+"rechargeCard"
+).style.display =
 "block";
+
+
+const button =
+document.getElementById(
+"rechargeButton"
+);
+
+
+button.disabled =
+false;
+
+
+button.textContent =
+"KONTINYE";
 
 
 updateTotal();
 
+
 window.scrollTo({
+
 top:0,
+
 behavior:"smooth"
+
 });
 
 }
 
 
+
+/* ===================================== */
+/* KALKIL INISYAL */
+/* ===================================== */
+
 updateTotal();
+
 
 </script>
 
