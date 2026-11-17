@@ -1,33 +1,205 @@
-
 <!DOCTYPE html>
 <html lang="ht">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MERU RECHARGE HT</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172b4d}
-header{background:#102b50;color:white;padding:25px 18px;text-align:center}
-.logo{font-size:27px;font-weight:900;letter-spacing:1px}
-header p{color:#cbd9ed;margin-bottom:0}
-main{max-width:480px;margin:25px auto;padding:20px}
-.card{background:white;padding:24px;border-radius:18px;box-shadow:0 8px 30px #102b5010}
-h2{margin-top:0}
-label{display:block;font-weight:bold;margin:18px 0 8px}
-input,select{width:100%;padding:15px;border:1px solid #d9e1ec;border-radius:10px;font-size:16px;background:white}
-.methods{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.method{border:2px solid #dbe3ed;border-radius:12px;padding:15px 8px;text-align:center;cursor:pointer;font-weight:bold}
-.method input{width:auto}
-.method:has(input:checked){border-color:#1769c2;background:#eff6ff}
-.summary{background:#f1f6fc;padding:16px;border-radius:12px;margin-top:20px}
-.summary p{display:flex;justify-content:space-between;gap:10px;margin:13px 0}
-.total{font-size:21px;color:#1263bd;font-weight:bold}
-button{width:100%;padding:16px;margin-top:20px;border:0;border-radius:11px;background:#1769c2;color:white;font-size:16px;font-weight:bold;cursor:pointer}
-.small{font-size:12px;color:#64748b;line-height:1.6;margin-top:18px}
-footer{text-align:center;color:#718096;padding:20px;font-size:12px}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f1f5f9;
+color:#172b4d
+}
+
+header{
+background:#102b50;
+color:white;
+padding:25px 18px;
+text-align:center
+}
+
+.logo{
+font-size:27px;
+font-weight:900;
+letter-spacing:1px
+}
+
+header p{
+color:#cbd9ed;
+margin-bottom:0
+}
+
+main{
+max-width:480px;
+margin:25px auto;
+padding:20px
+}
+
+.card{
+background:white;
+padding:24px;
+border-radius:18px;
+box-shadow:0 8px 30px #102b5010
+}
+
+h2{
+margin-top:0
+}
+
+label{
+display:block;
+font-weight:bold;
+margin:18px 0 8px
+}
+
+input,select{
+width:100%;
+padding:15px;
+border:1px solid #d9e1ec;
+border-radius:10px;
+font-size:16px;
+background:white
+}
+
+.methods{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+
+.method{
+border:2px solid #dbe3ed;
+border-radius:12px;
+padding:15px 8px;
+text-align:center;
+cursor:pointer;
+font-weight:bold
+}
+
+.method input{
+width:auto
+}
+
+.method:has(input:checked){
+border-color:#1769c2;
+background:#eff6ff
+}
+
+.summary{
+background:#f1f6fc;
+padding:16px;
+border-radius:12px;
+margin-top:20px
+}
+
+.summary p{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin:13px 0
+}
+
+.total{
+font-size:21px;
+color:#1263bd;
+font-weight:bold
+}
+
+button{
+width:100%;
+padding:16px;
+margin-top:20px;
+border:0;
+border-radius:11px;
+background:#1769c2;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer
+}
+
+button:hover{
+background:#1258a3
+}
+
+.confirmation{
+display:none;
+text-align:center
+}
+
+.success{
+font-size:50px;
+margin-bottom:10px
+}
+
+.order-box{
+background:#f1f6fc;
+padding:18px;
+border-radius:12px;
+margin-top:20px;
+text-align:left
+}
+
+.order-box p{
+display:flex;
+justify-content:space-between;
+gap:15px;
+border-bottom:1px solid #dbe3ed;
+padding:10px 0;
+margin:0
+}
+
+.order-box p:last-child{
+border-bottom:0
+}
+
+.status{
+display:inline-block;
+padding:7px 12px;
+border-radius:20px;
+background:#fff3cd;
+color:#856404;
+font-weight:bold;
+font-size:13px
+}
+
+.small{
+font-size:12px;
+color:#64748b;
+line-height:1.6;
+margin-top:18px
+}
+
+footer{
+text-align:center;
+color:#718096;
+padding:20px;
+font-size:12px
+}
+
+.secondary{
+background:#64748b
+}
+
+.secondary:hover{
+background:#475569
+}
+
+.copy-btn{
+background:#0f766e;
+margin-top:10px
+}
+
+.copy-btn:hover{
+background:#0d5f59
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -36,14 +208,26 @@ footer{text-align:center;color:#718096;padding:20px;font-size:12px}
 </header>
 
 <main>
-<div class="card">
+
+<!-- FORMULAIRE RECHAJ -->
+<div class="card" id="rechargeCard">
+
 <h2>💳 Nouvelle recharge</h2>
-<p style="color:#64748b">Ranpli enfòmasyon yo pou prepare kòmann ou.</p>
+
+<p style="color:#64748b">
+Ranpli enfòmasyon yo pou prepare kòmann ou.
+</p>
 
 <label>ID oswa imel kont Meru</label>
-<input id="meru" placeholder="Antre enfòmasyon kont Meru ou">
+
+<input
+id="meru"
+type="text"
+placeholder="Antre enfòmasyon kont Meru ou"
+>
 
 <label>Chwazi montan an</label>
+
 <select id="amount" onchange="updateTotal()">
 <option value="5">5 USD</option>
 <option value="10">10 USD</option>
@@ -53,87 +237,342 @@ footer{text-align:center;color:#718096;padding:20px;font-size:12px}
 </select>
 
 <label>Chwazi metòd peman</label>
+
 <div class="methods">
+
 <label class="method">
 <input type="radio" name="payment" value="MonCash" checked>
 MonCash
 </label>
+
 <label class="method">
 <input type="radio" name="payment" value="NatCash">
 NatCash
 </label>
+
 </div>
 
 <div class="summary">
+
 <strong>REZIME KÒMANN</strong>
-<p><span>Montan rechaj</span><strong id="usd">5 USD</strong></p>
-<p><span>To dola</span><strong>130 HTG / USD</strong></p>
-<p><span>Pri baz</span><strong id="base">650 HTG</strong></p>
-<p><span>Komisyon (10%)</span><strong id="fee">65 HTG</strong></p>
+
+<p>
+<span>Montan rechaj</span>
+<strong id="usd">5 USD</strong>
+</p>
+
+<p>
+<span>To dola</span>
+<strong>130 HTG / USD</strong>
+</p>
+
+<p>
+<span>Pri baz</span>
+<strong id="base">650 HTG</strong>
+</p>
+
+<p>
+<span>Komisyon (10%)</span>
+<strong id="fee">65 HTG</strong>
+</p>
+
 <hr>
-<p><strong>Total pou peye</strong><strong class="total" id="total">715 HTG</strong></p>
+
+<p>
+<strong>Total pou peye</strong>
+<strong class="total" id="total">715 HTG</strong>
+</p>
+
 </div>
 
-<button onclick="recharge()">KONTINYE</button>
+<button onclick="recharge()">
+KONTINYE
+</button>
 
 <p class="small">
-Remak: Sa a se yon demonstrasyon kalkil.
-Peman MonCash/NatCash ak transfè Meru poko aktive.
+Remak: Peman MonCash/NatCash ak transfè Meru poko aktive.
 Pa voye lajan sou paj demonstrasyon sa a.
 </p>
+
 </div>
+
+
+<!-- KONFIMASYON KÒMANN -->
+
+<div class="card confirmation" id="confirmationCard">
+
+<div class="success">✅</div>
+
+<h2>Kòmann ou kreye!</h2>
+
+<p style="color:#64748b">
+Tanpri konsève nimewo tranzaksyon sa a.
+</p>
+
+<div class="order-box">
+
+<p>
+<span>Nimewo kòmann</span>
+<strong id="orderId"></strong>
+</p>
+
+<p>
+<span>Kont Meru</span>
+<strong id="orderMeru"></strong>
+</p>
+
+<p>
+<span>Rechaj</span>
+<strong id="orderAmount"></strong>
+</p>
+
+<p>
+<span>Pri baz</span>
+<strong id="orderBase"></strong>
+</p>
+
+<p>
+<span>Komisyon</span>
+<strong id="orderFee"></strong>
+</p>
+
+<p>
+<span>Total</span>
+<strong id="orderTotal"></strong>
+</p>
+
+<p>
+<span>Peman</span>
+<strong id="orderPayment"></strong>
+</p>
+
+<p>
+<span>Estati</span>
+<strong class="status">AN ATANT</strong>
+</p>
+
+</div>
+
+<button class="copy-btn" onclick="copyOrder()">
+📋 KOPYE NIMEWO KÒMANN
+</button>
+
+<button class="secondary" onclick="newOrder()">
+➕ FÈ YON LÒT KÒMANN
+</button>
+
+<p class="small">
+Kòmann sa a anrejistre kòm yon demonstrasyon.
+Peman ak rechaj Meru poko fèt otomatikman.
+</p>
+
+</div>
+
 </main>
 
-<footer>© 2026 MERU RECHARGE HT • Tout dwa rezève</footer>
+<footer>
+© 2026 MERU RECHARGE HT • Tout dwa rezève
+</footer>
+
 
 <script>
+
 const EXCHANGE_RATE = 130;
 const COMMISSION_RATE = 0.10;
 
-function updateTotal(){
- const amount = Number(document.getElementById("amount").value);
- const base = amount * EXCHANGE_RATE;
- const fee = base * COMMISSION_RATE;
- const total = base + fee;
 
- document.getElementById("usd").textContent = amount + " USD";
- document.getElementById("base").textContent =
-   base.toLocaleString("fr-FR") + " HTG";
- document.getElementById("fee").textContent =
-   fee.toLocaleString("fr-FR") + " HTG";
- document.getElementById("total").textContent =
-   total.toLocaleString("fr-FR") + " HTG";
+/* Fòma lajan */
+
+function money(value){
+return value.toLocaleString("fr-FR") + " HTG";
 }
+
+
+/* Kalkile total */
+
+function updateTotal(){
+
+const amount =
+Number(document.getElementById("amount").value);
+
+const base =
+amount * EXCHANGE_RATE;
+
+const fee =
+base * COMMISSION_RATE;
+
+const total =
+base + fee;
+
+
+document.getElementById("usd").textContent =
+amount + " USD";
+
+document.getElementById("base").textContent =
+money(base);
+
+document.getElementById("fee").textContent =
+money(fee);
+
+document.getElementById("total").textContent =
+money(total);
+
+}
+
+
+/* Kreye nimewo kòmann */
+
+function generateOrderId(){
+
+const now = new Date();
+
+const year = now.getFullYear();
+
+const month =
+String(now.getMonth()+1).padStart(2,"0");
+
+const day =
+String(now.getDate()).padStart(2,"0");
+
+const random =
+Math.floor(1000 + Math.random()*9000);
+
+return "MR-" + year + month + day + "-" + random;
+
+}
+
+
+/* Kreye kòmann */
 
 function recharge(){
- const meru = document.getElementById("meru").value.trim();
- const amount = Number(document.getElementById("amount").value);
- const payment = document.querySelector(
-   'input[name="payment"]:checked'
- ).value;
 
- if(!meru){
-  alert("Tanpri antre ID oswa imel kont Meru ou.");
-  return;
- }
+const meru =
+document.getElementById("meru").value.trim();
 
- const base = amount * EXCHANGE_RATE;
- const fee = base * COMMISSION_RATE;
- const total = base + fee;
+const amount =
+Number(document.getElementById("amount").value);
 
- alert(
-  "DEMANN DEMONSTRASYON\n\n"+
-  "Kont Meru: "+meru+
-  "\nRechaj: "+amount+" USD"+
-  "\nPri baz: "+base+" HTG"+
-  "\nKomisyon: "+fee+" HTG"+
-  "\nTotal: "+total+" HTG"+
-  "\nPeman: "+payment+
-  "\n\nPeman poko aktive."
- );
+const payment =
+document.querySelector(
+'input[name="payment"]:checked'
+).value;
+
+
+if(!meru){
+
+alert(
+"Tanpri antre ID oswa imel kont Meru ou."
+);
+
+return;
+
 }
 
+
+const base =
+amount * EXCHANGE_RATE;
+
+const fee =
+base * COMMISSION_RATE;
+
+const total =
+base + fee;
+
+const orderId =
+generateOrderId();
+
+
+/* Mete enfòmasyon yo nan paj konfimasyon */
+
+document.getElementById("orderId").textContent =
+orderId;
+
+document.getElementById("orderMeru").textContent =
+meru;
+
+document.getElementById("orderAmount").textContent =
+amount + " USD";
+
+document.getElementById("orderBase").textContent =
+money(base);
+
+document.getElementById("orderFee").textContent =
+money(fee);
+
+document.getElementById("orderTotal").textContent =
+money(total);
+
+document.getElementById("orderPayment").textContent =
+payment;
+
+
+/* Chanje ekran */
+
+document.getElementById("rechargeCard").style.display =
+"none";
+
+document.getElementById("confirmationCard").style.display =
+"block";
+
+
+/* Mete paj la anlè */
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+/* Kopye nimewo kòmann */
+
+function copyOrder(){
+
+const orderId =
+document.getElementById("orderId").textContent;
+
+navigator.clipboard.writeText(orderId);
+
+alert(
+"Nimewo kòmann "+orderId+" kopiye."
+);
+
+}
+
+
+/* Nouvo kòmann */
+
+function newOrder(){
+
+document.getElementById("meru").value = "";
+
+document.getElementById("amount").value = "5";
+
+document.querySelector(
+'input[name="payment"][value="MonCash"]'
+).checked = true;
+
+
+document.getElementById("confirmationCard").style.display =
+"none";
+
+document.getElementById("rechargeCard").style.display =
+"block";
+
+
 updateTotal();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+updateTotal();
+
 </script>
 
 </body>
