@@ -118,6 +118,29 @@ NatCash
 <p class="small">Kòmann lan anrejistre nan baz done MERU RECHARGE HT epi li rete an atant jiskaske administratè a trete li.</p>
 </div>
 
+<section id="orderTracking" style="background:#fff;padding:22px;border-radius:12px;margin:25px auto;max-width:600px;box-shadow:0 3px 12px #0001;">
+  <h2 style="color:#087443;text-align:center;">SWIV KÒMANN OU</h2>
+  <p style="text-align:center;">Antre nimewo kòmann ou pou verifye estati recharge ou.</p>
+
+  <input
+    type="text"
+    id="trackingOrderNumber"
+    placeholder="Antre nimewo kòmann ou"
+    style="width:100%;padding:13px;border:1px solid #ccc;border-radius:7px;margin:10px 0;"
+  >
+
+  <button
+    type="button"
+    id="trackingButton"
+    onclick="checkMyOrder()"
+    style="width:100%;padding:13px;background:#087443;color:white;border:0;border-radius:7px;font-weight:bold;cursor:pointer;"
+  >
+    VERIFYE KÒMANN MWEN
+  </button>
+
+  <div id="trackingResult" style="margin-top:18px;text-align:center;"></div>
+</section>
+
 </main>
 
 <footer>© 2026 MERU RECHARGE HT • Tout dwa rezève</footer>
@@ -336,6 +359,51 @@ window.scrollTo({top:0,behavior:"smooth"});
 /* KALKIL INISYAL */
 
 updateTotal();
+
+async function checkMyOrder() {
+  const input = document.getElementById("trackingOrderNumber");
+  const result = document.getElementById("trackingResult");
+  const button = document.getElementById("trackingButton");
+
+  const orderNumber = input.value.trim();
+
+  if (!orderNumber) {
+    result.textContent = "Tanpri antre nimewo kòmann ou.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "AP VERIFYE...";
+  result.textContent = "";
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "check_order_status",
+      { p_order_number: orderNumber }
+    );
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      result.textContent = "Nou pa jwenn kòmann sa a. Verifye nimewo a.";
+    } else {
+      const status = data[0].status;
+      const labels = {
+        pending: "Kòmann ou an atant.",
+        completed: "Recharge ou fini avèk siksè!",
+        rejected: "Kòmann ou pa aksepte. Tanpri kontakte administratè a."
+      };
+
+      result.textContent = labels[status] || "Estati kòmann lan: " + status;
+    }
+  } catch (error) {
+    console.error(error);
+    result.textContent = "Gen yon erè pandan verifikasyon an. Eseye ankò.";
+  }
+
+  button.disabled = false;
+  button.textContent = "VERIFYE KÒMANN MWEN";
+}
 
 </script>
 
