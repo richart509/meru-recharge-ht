@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrasyon - MERU RECHARGE HT</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;background:#f1f5f9;font-family:Arial,sans-serif;color:#1e293b}
+.container{max-width:1100px;margin:30px auto}
+.card{background:white;padding:25px;border-radius:12px;box-shadow:0 3px 15px #0001;margin-bottom:20px}
+h1{color:#087443;text-align:center}
+h2{font-size:20px}
+input,select,button{padding:12px;border-radius:7px;border:1px solid #cbd5e1;font-size:15px}
+input{width:100%;margin:8px 0}
+button{background:#087443;color:white;border:0;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5;cursor:not-allowed}
+.logout{background:#b91c1c}
+#loginSection{max-width:420px;margin:50px auto}
+#dashboard{display:none}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:850px}
+th,td{padding:12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:14px}
+th{background:#ecfdf5;color:#065f46}
+td select{width:130px;padding:8px}
+.small{font-size:13px;color:#64748b}
+.message{margin-top:12px;font-size:14px;white-space:pre-wrap}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.refresh{background:#1d4ed8}
+@media(max-width:600px){body{padding:10px}.card{padding:16px}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>MERU RECHARGE HT</h1>
+
+<section class="card" id="loginSection">
+<h2>Koneksyon Administratè</h2>
+<p class="small">Antre imèl ak modpas kont administratè a.</p>
+
+<form id="loginForm">
+<input id="email" type="email" placeholder="Imèl administratè a" required>
+<input id="password" type="password" placeholder="Modpas" required>
+<button type="submit" id="loginButton">KONEKTE</button>
+</form>
+
+<div class="message" id="loginMessage"></div>
+</section>
+
+<section id="dashboard">
+<div class="card">
+<div class="actions">
+<h2 style="margin-right:auto">Tablo Kòmann yo</h2>
+<button class="refresh" id="refreshButton">RAFRECHI</button>
+<button class="logout" id="logoutButton">DEKONEKTE</button>
+</div>
+<p class="small" id="orderCount">Ap chèche kòmann yo...</p>
+<div class="message" id="dashboardMessage"></div>
+</div>
+
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Nimewo</th>
+<th>Kont Méru</th>
+<th>Montan USD</th>
+<th>Total HTG</th>
+<th>Peman</th>
+<th>Dat</th>
+<th>Estati</th>
+<th>Aksyon</th>
+</tr>
+</thead>
+<tbody id="ordersBody">
+<tr><td colspan="8">Ap chaje...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+</div>
+
+<script>
+const SUPABASE_URL = "https://xnspppxuceuihtfrunbb.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_LFqzZBl76AMqlAASXgfw7g_VDbTHEOL";
+
+const ADMIN_UID = "8aac15bc-2f9b-4528-9391-983c4605a64a";
+
+const supabaseClient = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+const loginSection = document.getElementById("loginSection");
+const dashboard = document.getElementById("dashboard");
+const loginMessage = document.getElementById("loginMessage");
+const dashboardMessage = document.getElementById("dashboardMessage");
+
+function showLogin(message = "") {
+loginSection.style.display = "block";
+dashboard.style.display = "none";
+loginMessage.textContent = message;
+}
+
+function showDashboard() {
+loginSection.style.display = "none";
+dashboard.style.display = "block";
+}
+
+async function verifyAdmin() {
+const { data, error } = await supabaseClient.auth.getUser();
+
+if (error || !data.user) {
+showLogin();
+return false;
+}
+
+if (data.user.id !== ADMIN_UID) {
+await supabaseClient.auth.signOut();
+showLogin("Kont sa a pa gen otorizasyon administratè.");
+return false;
+}
+
+showDashboard();
+await loadOrders();
+return true;
+}
+
+document.getElementById("loginForm").addEventListener("submit", async (event) => {
+event.preventDefault();
+
+const button = document.getElementById("loginButton");
+button.disabled = true;
+button.textContent = "AP KONEKTE...";
+loginMessage.textContent = "";
+
+const email = document.getElementById("email").value.trim();
+const password = document.getElementById("password").value;
+
+const { error } = await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
+
+button.disabled = false;
+button.textContent = "KONEKTE";
+
+if (error) {
+loginMessage.textContent = "Erè koneksyon: " + error.message;
+return;
+}
+
+await verifyAdmin();
+});
+
+async function loadOrders() {
+const body = document.getElementById("ordersBody");
+const count = document.getElementById("orderCount");
+
+body.innerHTML = '<tr><td colspan="8">Ap chaje kòmann yo...</td></tr>';
+dashboardMessage.textContent = "";
+
+const { data, error } = await supabaseClient
+.from("orders")
+.select("*")
+.order("created_at", { ascending: false });
+
+if (error) {
+body.innerHTML = "";
+dashboardMessage.textContent = "Erè lè n ap chèche kòmann yo: " + error.message;
+count.textContent = "";
+return;
+}
+
+count.textContent = "Kantite kòmann: " + data.length;
+
+if (!data.length) {
+body.innerHTML = '<tr><td colspan="8">Pa gen kòmann pou kounye a.</td></tr>';
+return;
+}
+
+body.innerHTML = data.map(order => {
+const date = order.created_at
+? new Date(order.created_at).toLocaleString("fr-FR")
+: "Pa disponib";
+
+const status = order.status || "pending";
+
+return `
+<tr>
+<td>${escapeHTML(order.order_number)}</td>
+<td>${escapeHTML(order.meru_account)}</td>
+<td>${escapeHTML(order.amount_usd)} USD</td>
+<td>${escapeHTML(order.total_htg)} HTG</td>
+<td>${escapeHTML(order.payment_method)}</td>
+<td>${escapeHTML(date)}</td>
+<td>
+<select id="status-${Number(order.id)}">
+<option value="pending" ${status === "pending" ? "selected" : ""}>Pending</option>
+<option value="completed" ${status === "completed" ? "selected" : ""}>Completed</option>
+<option value="rejected" ${status === "rejected" ? "selected" : ""}>Rejected</option>
+</select>
+</td>
+<td>
+<button onclick="updateOrder(${Number(order.id)})">ANREJISTRE</button>
+</td>
+</tr>`;
+}).join("");
+}
+
+function escapeHTML(value) {
+return String(value ?? "").replace(/[&<>"']/g, char => ({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+})[char]);
+}
+
+async function updateOrder(id) {
+const select = document.getElementById("status-" + id);
+const newStatus = select.value;
+
+dashboardMessage.textContent = "Ap mete ajou estati kòmann lan...";
+
+const { error } = await supabaseClient
+.from("orders")
+.update({ status: newStatus })
+.eq("id", id);
+
+if (error) {
+dashboardMessage.textContent = "Erè: " + error.message;
+return;
+}
+
+dashboardMessage.textContent = "Estati kòmann lan chanje avèk siksè.";
+await loadOrders();
+}
+
+document.getElementById("refreshButton").addEventListener("click", loadOrders);
+
+document.getElementById("logoutButton").addEventListener("click", async () => {
+await supabaseClient.auth.signOut();
+showLogin("Ou dekonekte avèk siksè.");
+});
+
+verifyAdmin();
+</script>
+
+</body>
+</html>
