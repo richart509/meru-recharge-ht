@@ -1,11 +1,10 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ht">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MERU RECHARGE HT</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -41,6 +40,8 @@ footer{text-align:center;color:#718096;padding:20px;font-size:12px}
 .secondary:hover{background:#475569}
 .copy-btn{background:#0f766e;margin-top:10px}
 .copy-btn:hover{background:#0d5f59}
+#paymentDetails{background:#eff6ff;padding:15px;border-radius:10px;margin:15px 0}
+#paymentMessage{background:#fff8e7;color:#854d0e;padding:13px;border-radius:9px;margin-top:15px;line-height:1.6}
 </style>
 </head>
 
@@ -54,6 +55,7 @@ footer{text-align:center;color:#718096;padding:20px;font-size:12px}
 <main>
 
 <div class="card" id="rechargeCard">
+
 <h2>💳 Nouvelle recharge</h2>
 <p style="color:#64748b">Ranpli enfòmasyon yo pou prepare kòmann ou.</p>
 
@@ -70,44 +72,35 @@ footer{text-align:center;color:#718096;padding:20px;font-size:12px}
 </select>
 
 <label>Chwazi metòd peman</label>
+
 <div class="methods">
 <label class="method">
 <input type="radio" name="payment" value="MonCash" checked>
 MonCash
 </label>
+
 <label class="method">
 <input type="radio" name="payment" value="NatCash">
 NatCash
 </label>
 </div>
 
-<div id="paymentDetails" style="background:#f0fdf4;padding:15px;border-radius:10px;margin:15px 0;">
-  <h3 style="color:#087443;margin-top:0;">ENFÒMASYON PEMAN</h3>
-
-  <div style="margin-bottom:15px;">
-    <strong>MonCash</strong>
-    <p>+509 4728-3653</p>
-    <p>Non: Domingue Trezil</p>
-  </div>
-
-  <hr>
-
-  <div>
-    <strong>NatCash</strong>
-    <p>+509 4254-9986</p>
-    <p>Non: Ashley Dorval</p>
-  </div>
+<div id="paymentDetails">
+<h3 style="color:#087443;margin-top:0">PEMAN SEKIRIZE</h3>
+<p>Chwazi MonCash oswa NatCash. Apre ou fin kontinye, sit la ap konekte ak Freda Pay pou ouvri paj peman an.</p>
 </div>
+
 <div style="background:#fff8e7;padding:18px;border-radius:10px;margin:20px 0;border:1px solid #f0d58a;">
-  <h3 style="color:#087443;margin-top:0;">ETAP POU FÈ RECHARGE</h3>
-
-  <ol style="line-height:1.9;padding-left:22px;">
-    <li>Chwazi MonCash oswa NatCash.</li>
-    <li>Voye montan kòmann lan sou nimewo ki parèt la.</li>
-    <li>Kenbe prèv tranzaksyon an.</li>
-    <li>Tann administratè a trete kòmann ou.</li>
-  </ol>
+<h3 style="color:#087443;margin-top:0">ETAP POU FÈ RECHARGE</h3>
+<ol style="line-height:1.9;padding-left:22px">
+<li>Chwazi MonCash oswa NatCash.</li>
+<li>Chwazi montan rechaj la.</li>
+<li>Klike sou KONTINYE.</li>
+<li>Ou pral ale sou paj peman Freda Pay la.</li>
+<li>Swiv enstriksyon peman yo.</li>
+</ol>
 </div>
+
 <div class="summary">
 <strong>REZIME KÒMANN</strong>
 <p><span>Montan rechaj</span><strong id="usd">5 USD</strong></p>
@@ -120,13 +113,21 @@ NatCash
 
 <button id="rechargeButton" onclick="recharge()">KONTINYE</button>
 
-<p class="small">Kòmann ou kreye a ap anrejistre otomatikman nan sistèm MERU RECHARGE HT.</p>
+<p class="small">Kòmann ou ap anrejistre nan baz done MERU RECHARGE HT anvan peman an kòmanse.</p>
+
 </div>
 
+<!-- KONFIMASYON SI PEMAN AN PA KA KÒMANSE -->
+
 <div class="card confirmation" id="confirmationCard">
-<div class="success">✅</div>
-<h2>Kòmann ou kreye!</h2>
-<p style="color:#64748b">Tanpri konsève nimewo tranzaksyon sa a.</p>
+
+<div class="success">⚠️</div>
+<h2>Kòmann ou anrejistre!</h2>
+
+<p style="color:#64748b">
+Kòmann lan anrejistre, men nou poko kapab ouvri paj peman an.
+Ou ka eseye ankò san kreye yon lòt kòmann.
+</p>
 
 <div class="order-box">
 <p><span>Nimewo kòmann</span><strong id="orderId"></strong></p>
@@ -139,47 +140,51 @@ NatCash
 <p><span>Estati</span><strong class="status">AN ATANT</strong></p>
 </div>
 
+<div id="paymentMessage"></div>
+
+<button id="retryButton" onclick="retryPayment()">🔄 REESYE PEMAN</button>
+
 <button class="copy-btn" onclick="copyOrder()">📋 KOPYE NUMEWO KÒMANN</button>
+
 <button class="secondary" onclick="newOrder()">➕ FÈ YON LÒT KÒMANN</button>
 
-<p class="small">Kòmann lan anrejistre nan baz done MERU RECHARGE HT epi li rete an atant jiskaske administratè a trete li.</p>
+<p class="small">Pa voye lajan dirèkteman si paj peman Freda Pay la poko ouvri.</p>
+
 </div>
 
+<!-- SWIV KÒMANN -->
+
 <section id="orderTracking" style="background:#fff;padding:22px;border-radius:12px;margin:25px auto;max-width:600px;box-shadow:0 3px 12px #0001;">
-  <h2 style="color:#087443;text-align:center;">SWIV KÒMANN OU</h2>
-  <p style="text-align:center;">Antre nimewo kòmann ou pou verifye estati recharge ou.</p>
 
-  <input
-    type="text"
-    id="trackingOrderNumber"
-    placeholder="Antre nimewo kòmann ou"
-    style="width:100%;padding:13px;border:1px solid #ccc;border-radius:7px;margin:10px 0;"
-  >
+<h2 style="color:#087443;text-align:center">SWIV KÒMANN OU</h2>
 
-  <button
-    type="button"
-    id="trackingButton"
-    onclick="checkMyOrder()"
-    style="width:100%;padding:13px;background:#087443;color:white;border:0;border-radius:7px;font-weight:bold;cursor:pointer;"
-  >
-    VERIFYE KÒMANN MWEN
-  </button>
+<p style="text-align:center">Antre nimewo kòmann ou pou verifye estati recharge ou.</p>
 
-  <div id="trackingResult" style="margin-top:18px;text-align:center;"></div>
+<input type="text" id="trackingOrderNumber" placeholder="Antre nimewo kòmann ou" style="width:100%;padding:13px;border:1px solid #ccc;border-radius:7px;margin:10px 0;">
+
+<button type="button" id="trackingButton" onclick="checkMyOrder()" style="width:100%;padding:13px;background:#087443;color:white;border:0;border-radius:7px;font-weight:bold;cursor:pointer">
+VERIFYE KÒMANN MWEN
+</button>
+
+<div id="trackingResult" style="margin-top:18px;text-align:center"></div>
+
 </section>
+
+<!-- WHATSAPP -->
+
 <section style="text-align:center;margin:25px auto;padding:20px;background:#eafff0;border-radius:12px;max-width:600px;">
-  <h3 style="color:#087443;">BEZWEN ÈD?</h3>
-  <p>Voye prèv peman ou bay administratè a sou WhatsApp.</p>
 
-  <a
-    href="https://wa.me/50942549986?text=Bonjou%2C%20mwen%20vle%20voye%20pr%C3%A8v%20peman%20k%C3%B2mann%20mwen."
-    target="_blank"
-    rel="noopener"
-    style="display:inline-block;background:#25D366;color:white;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:bold;"
-  >
-    VOYE PRÈV PEMAN SOU WHATSAPP
-  </a>
+<h3 style="color:#087443">BEZWEN ÈD?</h3>
+<p>Kontakte administratè a sou WhatsApp.</p>
+
+<a href="https://wa.me/50942549986?text=Bonjou%2C%20mwen%20bezwen%20%C3%A8d%20pou%20k%C3%B2mann%20mwen."
+target="_blank" rel="noopener"
+style="display:inline-block;background:#25D366;color:white;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:bold">
+KONTAKTE NOU SOU WHATSAPP
+</a>
+
 </section>
+
 </main>
 
 <footer>© 2026 MERU RECHARGE HT • Tout dwa rezève</footer>
@@ -203,6 +208,10 @@ SUPABASE_PUBLISHABLE_KEY
 
 const EXCHANGE_RATE = 130;
 const COMMISSION_RATE = 0.10;
+
+/* KÒMANN K AP TANN */
+
+let currentOrder = null;
 
 function money(value){
 return value.toLocaleString("fr-FR") + " HTG";
@@ -240,9 +249,136 @@ return "MR-" + year + month + day + "-" + random;
 
 }
 
+/* MONTRE DETAY KÒMANN */
+
+function showOrderConfirmation(){
+
+document.getElementById("orderId").textContent = currentOrder.orderId;
+document.getElementById("orderMeru").textContent = currentOrder.meru;
+document.getElementById("orderAmount").textContent = currentOrder.amount + " USD";
+document.getElementById("orderBase").textContent = money(currentOrder.base);
+document.getElementById("orderFee").textContent = money(currentOrder.fee);
+document.getElementById("orderTotal").textContent = money(currentOrder.total);
+document.getElementById("orderPayment").textContent = currentOrder.payment;
+
+document.getElementById("rechargeCard").style.display = "none";
+document.getElementById("confirmationCard").style.display = "block";
+
+document.getElementById("orderTracking").style.display = "block";
+
+window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+/* KONEKTE AK FONKSYON FREDAPAY */
+
+async function startFredaPayment(){
+
+if(!currentOrder){
+alert("Pa gen kòmann pou peye.");
+return;
+}
+
+const retryButton = document.getElementById("retryButton");
+const mainButton = document.getElementById("rechargeButton");
+
+retryButton.disabled = true;
+retryButton.textContent = "AP KONEKTE AK FREDAPAY...";
+
+mainButton.disabled = true;
+mainButton.textContent = "AP PREPARE PEMAN...";
+
+document.getElementById("paymentMessage").textContent =
+"Tanpri tann pandan n ap prepare peman ou.";
+
+try{
+
+const { data, error } = await supabaseClient.functions.invoke(
+"fredapay-payment",
+{
+body:{
+action:"create",
+order_number:currentOrder.orderId,
+method:currentOrder.payment.toLowerCase()
+}
+}
+);
+
+if(error){
+
+let details = error.message || "Erè koneksyon ak Supabase.";
+
+try{
+if(error.context && typeof error.context.clone === "function"){
+const errorBody = await error.context.clone().json();
+details =
+errorBody.details ||
+errorBody.error ||
+details;
+}
+}catch(e){}
+
+throw new Error(details);
+
+}
+
+if(!data){
+throw new Error("Pa gen repons nan fonksyon Freda Pay la.");
+}
+
+if(!data.checkout_url){
+
+throw new Error(
+data.details ||
+data.error ||
+"Freda Pay pa retounen yon checkout_url."
+);
+
+}
+
+const checkoutUrl = new URL(data.checkout_url);
+
+if(checkoutUrl.protocol !== "https:"){
+throw new Error("Adrès peman an pa sekirize.");
+}
+
+document.getElementById("paymentMessage").textContent =
+"Peman an pare. N ap voye ou sou Freda Pay...";
+
+retryButton.textContent = "PEMAN AN PARE...";
+
+window.location.assign(checkoutUrl.toString());
+
+}catch(error){
+
+console.error("Freda Pay connection error:",error);
+
+document.getElementById("paymentMessage").textContent =
+"Kòmann lan anrejistre, men peman an pa kòmanse. Detay: " +
+(error.message || "Erè enkoni.");
+
+retryButton.disabled = false;
+retryButton.textContent = "🔄 REESYE PEMAN";
+
+mainButton.disabled = false;
+mainButton.textContent = "KONTINYE";
+
+showOrderConfirmation();
+
+}
+
+}
+
 /* KREYE KÒMANN */
 
 async function recharge(){
+
+/* SI KÒMANN LAN DEJA KREYE, REESYE PEMAN SAN NOU PA KREYE YON LÒT */
+
+if(currentOrder){
+await startFredaPayment();
+return;
+}
 
 const meru = document.getElementById("meru").value.trim();
 
@@ -282,71 +418,72 @@ button.textContent = "AP ANREJISTRE...";
 
 try{
 
-/* ANREJISTRE NAN SUPABASE
-   Nou pa itilize .select() paske
-   aplikasyon an pa bezwen li kòmann lan apre INSERT.
-*/
+/* ANREJISTRE KÒMANN NAN SUPABASE */
 
 const { error } = await supabaseClient
 .from("orders")
 .insert({
-order_number: orderId,
-meru_account: meru,
-amount_usd: amount,
-exchange_rate: EXCHANGE_RATE,
-base_amount_htg: base,
-commission_htg: fee,
-total_htg: total,
-payment_method: payment,
-status: "pending"
+order_number:orderId,
+meru_account:meru,
+amount_usd:amount,
+exchange_rate:EXCHANGE_RATE,
+base_amount_htg:base,
+commission_htg:fee,
+total_htg:total,
+payment_method:payment,
+status:"pending"
 });
-
-/* SI GEN ERÈ */
 
 if(error){
 
-console.error("Supabase error:",error);
+console.error("Supabase insert error:",error);
 
-alert(
-"Nou pa kapab anrejistre kòmann lan.\n\n" +
-error.message
-);
-
-button.disabled = false;
-button.textContent = "KONTINYE";
-
-return;
+throw new Error(error.message);
 
 }
 
-/* MONTRE KONFIMASYON */
+/* KONSÈVE KÒMANN NAN POU REESYE SAN DUPLIKASYON */
 
-document.getElementById("orderId").textContent = orderId;
-document.getElementById("orderMeru").textContent = meru;
-document.getElementById("orderAmount").textContent = amount + " USD";
-document.getElementById("orderBase").textContent = money(base);
-document.getElementById("orderFee").textContent = money(fee);
-document.getElementById("orderTotal").textContent = money(total);
-document.getElementById("orderPayment").textContent = payment;
+currentOrder = {
+orderId,
+meru,
+amount,
+base,
+fee,
+total,
+payment
+};
 
-document.getElementById("rechargeCard").style.display = "none";
-document.getElementById("confirmationCard").style.display = "block";
+/* RELE FREDAPAY IMEDYATMAN */
 
-window.scrollTo({top:0,behavior:"smooth"});
+await startFredaPayment();
 
 }catch(error){
 
-console.error(error);
-
-alert(
-"Gen yon pwoblèm teknik. Tanpri eseye ankò.\n\n" +
-(error.message || "Erè koneksyon.")
-);
+console.error("Recharge error:",error);
 
 button.disabled = false;
 button.textContent = "KONTINYE";
 
+alert(
+"Nou pa kapab anrejistre kòmann lan.\n\n" +
+(error.message || "Erè koneksyon.")
+);
+
 }
+
+}
+
+/* REESYE PEMAN */
+
+async function retryPayment(){
+
+if(!currentOrder){
+alert("Pa gen kòmann pou reeseye.");
+return;
+}
+
+await startFredaPayment();
 
 }
 
@@ -354,17 +491,17 @@ button.textContent = "KONTINYE";
 
 async function copyOrder(){
 
-const orderId = document.getElementById("orderId").textContent;
+if(!currentOrder)return;
 
 try{
 
-await navigator.clipboard.writeText(orderId);
+await navigator.clipboard.writeText(currentOrder.orderId);
 
-alert("Nimewo kòmann " + orderId + " kopiye.");
+alert("Nimewo kòmann " + currentOrder.orderId + " kopiye.");
 
 }catch(error){
 
-alert("Nimewo kòmann ou se: " + orderId);
+alert("Nimewo kòmann ou se: " + currentOrder.orderId);
 
 }
 
@@ -373,6 +510,8 @@ alert("Nimewo kòmann ou se: " + orderId);
 /* FÈ YON LÒT KÒMANN */
 
 function newOrder(){
+
+currentOrder = null;
 
 document.getElementById("meru").value = "";
 document.getElementById("amount").value = "5";
@@ -389,6 +528,11 @@ const button = document.getElementById("rechargeButton");
 button.disabled = false;
 button.textContent = "KONTINYE";
 
+document.getElementById("retryButton").disabled = false;
+document.getElementById("retryButton").textContent = "🔄 REESYE PEMAN";
+
+document.getElementById("paymentMessage").textContent = "";
+
 updateTotal();
 
 window.scrollTo({top:0,behavior:"smooth"});
@@ -399,53 +543,70 @@ window.scrollTo({top:0,behavior:"smooth"});
 
 updateTotal();
 
-async function checkMyOrder() {
-  const input = document.getElementById("trackingOrderNumber");
-  const result = document.getElementById("trackingResult");
-  const button = document.getElementById("trackingButton");
+/* SWIV KÒMANN */
 
-  const orderNumber = input.value.trim();
+async function checkMyOrder(){
 
-  if (!orderNumber) {
-    result.textContent = "Tanpri antre nimewo kòmann ou.";
-    return;
-  }
+const input = document.getElementById("trackingOrderNumber");
+const result = document.getElementById("trackingResult");
+const button = document.getElementById("trackingButton");
 
-  button.disabled = true;
-  button.textContent = "AP VERIFYE...";
-  result.textContent = "";
+const orderNumber = input.value.trim();
 
-  try {
-    const { data, error } = await supabaseClient.rpc(
-      "check_order_status",
-      { p_order_number: orderNumber }
-    );
+if(!orderNumber){
+result.textContent = "Tanpri antre nimewo kòmann ou.";
+return;
+}
 
-    if (error) throw error;
+button.disabled = true;
+button.textContent = "AP VERIFYE...";
+result.textContent = "";
 
-    if (!data || data.length === 0) {
-      result.textContent = "Nou pa jwenn kòmann sa a. Verifye nimewo a.";
-    } else {
-      const status = data[0].status;
-      const labels = {
-        pending: "Kòmann ou an atant.",
-        completed: "Recharge ou fini avèk siksè!",
-        rejected: "Kòmann ou pa aksepte. Tanpri kontakte administratè a."
-      };
+try{
 
-      result.textContent = labels[status] || "Estati kòmann lan: " + status;
-    }
-  } catch (error) {
-    console.error(error);
-    result.textContent = "Gen yon erè pandan verifikasyon an. Eseye ankò.";
-  }
+const {data,error} = await supabaseClient.rpc(
+"check_order_status",
+{p_order_number:orderNumber}
+);
 
-  button.disabled = false;
-  button.textContent = "VERIFYE KÒMANN MWEN";
+if(error)throw error;
+
+if(!data || data.length === 0){
+
+result.textContent =
+"Nou pa jwenn kòmann sa a. Verifye nimewo a.";
+
+}else{
+
+const status = String(data[0].status).toLowerCase();
+
+const labels = {
+pending:"Kòmann ou an atant.",
+completed:"Recharge ou fini avèk siksè!",
+paid:"Peman konfime. Kòmann ou ap tann tretman recharge.",
+rejected:"Kòmann ou pa aksepte. Tanpri kontakte administratè a."
+};
+
+result.textContent =
+labels[status] || "Estati kòmann lan: " + status;
+
+}
+
+}catch(error){
+
+console.error("Tracking error:",error);
+
+result.textContent =
+"Gen yon erè pandan verifikasyon an. Eseye ankò.";
+
+}
+
+button.disabled = false;
+button.textContent = "VERIFYE KÒMANN MWEN";
+
 }
 
 </script>
 
 </body>
 </html>
-```
